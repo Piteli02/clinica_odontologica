@@ -23,9 +23,6 @@ Eduardo:
 		O usuário vai possuir uma tela a qual possui campos a serem preenchidos para cadastrar o
 		paciente no banco de dados.
         
-	-Login
-		Toda vez que o responsável pelo gerenciamento interno de pacientes for utilizar o software,
-		ele precisa realizar login no sistema.
 
 Andre:
 
@@ -40,7 +37,7 @@ Caio:
 		Caso o paciente queira remarcar horário, dia ou cancelar consulta, o responsável pela
 		utilização do software deve ser capaz de fazer essas alterações.
 
-  	-Menu principal
+  	-Botao de voltar
 
 Henrique:
 
