@@ -64,3 +64,8 @@ O programa vai ser desenvolvido na linguagem C e toda a interação do usuário 
 - Visualizar consultas de determinado paciente
 	- Caso casualidades aconteçam e seja preciso acessar todas as consultas de um cliente, o
 	responsável pela utilização de software pode fazer essa consulta rapidamente.
+
+
+## RESTRIÇÕES:
+- Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
+- Um paciente só pode ter uma consulta por dia;
