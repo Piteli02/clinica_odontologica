@@ -2,14 +2,91 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
-Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
-Caso nao seja peco pra digitar novamente
-*/
-int verificar_login(char usuario_setado[6], char senha_setada[6], char usuario_entrada[20], char senha_entrada[20]) {
+//Estrutura da hora
+typedef struct
+{
+	int hora;
+	int min;
+}Hora;
+
+//Estrutura da Data
+typedef struct 
+{
+	int ano;
+	int mes;
+	int dia;
+}Data;
+
+//Estrutura dos pacientes
+typedef struct 
+{
+	int cod_paciente;
+	char nome[20];
+	int telefone;
+}Paciente;
+
+//Estrutura da consulta
+typedef struct
+{
+	int cod_consulta;
+	Paciente paciente_da_consulta;
+	Hora hora_consulta;
+	Data data_consulta;
+}Consulta;
+
+//Variaveis com o usuario e senha do txt
+char usuario_setado[6], senha_setada[6];
+
+//Recebo os dados de login
+void fazer_login();
+
+//Opcoes de escolha para o que fazer no software
+int menu_principal();
+
+//Sequencia depois de ter decidido o que será feito no sofware
+void escolha_menu(int operador);
+
+//Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
+void verificar_login(char usuario_entrada[20], char senha_entrada[20]);
+
+int main(){
+
+	int operador = 0;
+
+	//Seleciono o arquivo com o login e senha_setada	
+	FILE *file_login;
+	file_login = fopen("login.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+	fscanf(file_login, "%s %s", usuario_setado, senha_setada); //recebo a senha e o usuario do arquivo txt
+	fclose(file_login);
+
+	fazer_login();
+
+	operador = menu_principal();
+
+	escolha_menu(operador);
+
+	return 0;
+}
+
+void fazer_login(){
+	system("cls"); //limpar terminal windows
+
+	char usuario_entrada[20], senha_entrada[20];
+
+	printf("--------------------BEM VINDO(A)--------------------\n\n");
+	printf("LOGIN:\n");
+
+	printf("Digite o nome de usuario: ");
+	scanf("%s", usuario_entrada);
+	printf("Digite a sua senha: ");
+	scanf("%s", senha_entrada);
+
+	verificar_login(usuario_entrada, senha_entrada);
+}
+
+void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
 
 	int verificar_usuario, verificar_senha;
-	int verificacao_final=0;
 	
 	verificar_usuario = strcmp(usuario_setado, usuario_entrada);
 	verificar_senha = strcmp(senha_setada, senha_entrada);
@@ -28,49 +105,22 @@ int verificar_login(char usuario_setado[6], char senha_setada[6], char usuario_e
 			verificar_usuario = strcmp(usuario_setado, usuario_entrada);
 			verificar_senha = strcmp(senha_setada, senha_entrada);
 
-			if(verificar_senha == 0 && verificar_usuario == 0){
-				verificacao_final = 1;
-				return(verificacao_final);
-			}
 	}
 
 }
 
-int main(){
-	
-	char usuario_setado[6], usuario_entrada[20];
-	char senha_setada[6], senha_entrada[20];
+int menu_principal(){
 
-	int escolha_menu=0;
+	int escolha_menu_func=0;
 
 	int controlador_menu_principal=0;
 
-	//Seleciono o arquivo com o login e senha_setada	
-	FILE *file_login;
-	file_login = fopen("login.txt", "r"); // "r" - porque quero pegar informacao do arquivo
-	fscanf(file_login, "%s %s", usuario_setado, senha_setada); //recebo a senha e o usuario do arquivo txt
-	fclose(file_login);
-
-	system("cls"); //limpar terminal windows
-
-	
-	
-	printf("--------------------BEM VINDO(A)--------------------\n\n");
-	printf("LOGIN:\n");
-
-	printf("Digite o nome de usuario: ");
-	scanf("%s", usuario_entrada);
-	printf("Digite a sua senha: ");
-	scanf("%s", senha_entrada);
-	
-	verificar_login(usuario_setado, senha_setada, usuario_entrada, senha_entrada);
-	
 	system("cls"); //limpar terminal windows
 	
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
 	//Usuario escolhe o que ele vai fazer no software a partir de um numero
-	while(escolha_menu==0 || escolha_menu != 1 && escolha_menu != 2 && escolha_menu != 3 && escolha_menu != 4 && escolha_menu != 5){
+	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5){
 		if(controlador_menu_principal!=0){
 			printf("--------------------OPCAO INVALIDA, TENTE NOVAMENTE--------------------\n");
 		}
@@ -81,14 +131,18 @@ int main(){
 		printf("4 para VISUALIZAR CONSULTAS DO DIA\n");
 		printf("5 para VISUALIZAR CONSULTAS DO PACIENTE\n\n");
 		printf("Escolha: ");
-		scanf("%d",&escolha_menu);
+		scanf("%d",&escolha_menu_func);
 
 		controlador_menu_principal++;
 		system("cls"); //limpar terminal windows
 	}
 
+	return escolha_menu_func;
+}
+
+void escolha_menu(int operador){
 	
-	switch(escolha_menu)
+	switch(operador)
 	{
 		case 1:
 			printf("FUNCAO PARA CADASTRAR NOVO CLIENTE\n");
@@ -107,5 +161,4 @@ int main(){
 			break;
 	}
 
-	return 0;
 }
