@@ -20,7 +20,7 @@ typedef struct
 //Estrutura dos pacientes
 typedef struct 
 {
-	int cod_paciente;
+	int cpf_paciente;
 	char nome[20];
 	int telefone;
 }Paciente;
@@ -56,6 +56,13 @@ int main(){
 	//Seleciono o arquivo com o login e senha_setada	
 	FILE *file_login;
 	file_login = fopen("login.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+	//Caso o usuario n tenha colocado o txt na mesma pasta que o executavel
+	if(file_login== NULL){
+		system("cls"); //limpar terminal windows
+		printf("\nERRO: Insira o arquivo 'login.txt' na mesma pasta que o executavel!!\n");
+		exit (0);
+	}
+
 	fscanf(file_login, "%s %s", usuario_setado, senha_setada); //recebo a senha e o usuario do arquivo txt
 	fclose(file_login);
 
