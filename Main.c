@@ -58,7 +58,7 @@ int main(){
 	file_login = fopen("login.txt", "r"); // "r" - porque quero pegar informacao do arquivo
 	//Caso o usuario n tenha colocado o txt na mesma pasta que o executavel
 	if(file_login== NULL){
-		system("cls"); //limpar terminal windows
+		system("clear"); //limpar terminal windows
 		printf("\nERRO: Insira o arquivo 'login.txt' na mesma pasta que o executavel!!\n");
 		exit (0);
 	}
@@ -76,7 +76,7 @@ int main(){
 }
 
 void fazer_login(){
-	system("cls"); //limpar terminal windows
+	system("clear"); //limpar terminal windows
 
 	char usuario_entrada[20], senha_entrada[20];
 
@@ -84,9 +84,11 @@ void fazer_login(){
 	printf("LOGIN:\n");
 
 	printf("Digite o nome de usuario: ");
-	scanf("%s", usuario_entrada);
+	fgets(usuario_entrada, 20, stdin);
+	usuario_entrada[strcspn(usuario_entrada, "\n")] = 0; //tirando o "\n" da string
 	printf("Digite a sua senha: ");
-	scanf("%s", senha_entrada);
+	fgets(senha_entrada, 20, stdin);
+	senha_entrada[strcspn(senha_entrada, "\n")] = 0; //tirando o "\n" da string
 
 	verificar_login(usuario_entrada, senha_entrada);
 }
@@ -100,14 +102,17 @@ void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
 	
 	while(verificar_senha != 0 || verificar_usuario != 0){
 
-			system("cls"); //limpar terminal windows
+			system("clear"); //limpar terminal windows
 
 			printf("--------------------LOGIN OU SENHA INCORRETO--------------------\n");
 
 			printf("Digite o nome de usuario novamente: ");
-			scanf("%s", usuario_entrada);
+			fgets(usuario_entrada, 20, stdin);
+			usuario_entrada[strcspn(usuario_entrada, "\n")] = 0; //tirando o "\n" da string
 			printf("Digite a sua senha novamente: ");
-			scanf("%s", senha_entrada);
+			fgets(senha_entrada, 20, stdin);
+			senha_entrada[strcspn(senha_entrada, "\n")] = 0; //tirando o "\n" da string
+
 
 			verificar_usuario = strcmp(usuario_setado, usuario_entrada);
 			verificar_senha = strcmp(senha_setada, senha_entrada);
@@ -122,7 +127,7 @@ int menu_principal(){
 
 	int controlador_menu_principal=0;
 
-	system("cls"); //limpar terminal windows
+	system("clear"); //limpar terminal windows
 	
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
@@ -141,7 +146,7 @@ int menu_principal(){
 		scanf("%d",&escolha_menu_func);
 
 		controlador_menu_principal++;
-		system("cls"); //limpar terminal windows
+		system("clear"); //limpar terminal windows
 	}
 
 	return escolha_menu_func;
