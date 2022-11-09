@@ -20,7 +20,7 @@ typedef struct
 //Estrutura dos pacientes
 typedef struct 
 {
-	char nome[30];
+	char nome[50];
 	char cpf[15];
 	char telefone[11];
 }Paciente;
@@ -41,7 +41,7 @@ char usuario_setado[6], senha_setada[6];
 void fazer_login();
 
 //Opcoes de escolha para o que fazer no software
-int menu_principal();
+void menu_principal();
 
 //Sequencia depois de ter decidido o que será feito no sofware
 void escolha_menu(int operador);
@@ -122,7 +122,7 @@ void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
 
 }
 
-int menu_principal(){
+void menu_principal(){
 
 	int escolha_menu_func=0;
 
@@ -200,7 +200,7 @@ void cadastrar_clientes(){
 
 		fflush(stdin);
 		printf("Insira o nome do paciente a ser cadastrado: ");
-		fgets(paciente.nome,30,stdin);
+		fgets(paciente.nome,50,stdin);
 		paciente.nome[strcspn(paciente.nome, "\n")] = 0; //tirando o "\n" da string
 
 		fflush(stdin);
