@@ -193,6 +193,7 @@ void cadastrar_clientes(){
 
 	Paciente paciente;
 
+	//loop para definir ate quando eu vou cadastrar clientes novos
 	while(controle=='s'){
 		system("cls");
 
@@ -217,6 +218,7 @@ void cadastrar_clientes(){
 
 		system("cls");
 
+		//checar se devo receber outro paciente ou se devo ir ao menu
 		fflush(stdin);
 		printf("Deseja cadastrar outro paciente (s/n): ");
 		controle = getchar();
