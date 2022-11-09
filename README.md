@@ -69,3 +69,6 @@ O programa vai ser desenvolvido na linguagem C e toda a interação do usuário 
 ## RESTRIÇÕES:
 - Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
 - Um paciente só pode ter uma consulta por dia;
+
+## OBSERVAÇÃO:
+Após um funcionamentoa adequado do software, seria interessante que a cada vez que o admistrador fizer login, seja possível inserir a data do dia, desse modo, as consultas anteriores a essa data escrita devem ser excluidas do TXT.
