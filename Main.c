@@ -71,9 +71,7 @@ int main(){
 
 	fazer_login();
 
-	operador = menu_principal();
-
-	escolha_menu(operador);
+	menu_principal();
 
 	return 0;
 }
@@ -152,7 +150,7 @@ int menu_principal(){
 		system("cls"); //limpar terminal windows
 	}
 
-	return escolha_menu_func;
+	escolha_menu(escolha_menu_func);
 }
 
 void escolha_menu(int operador){
@@ -227,5 +225,7 @@ void cadastrar_clientes(){
 			controle = getchar();
 		}
 	}
+
+	menu_principal();
 
 }
