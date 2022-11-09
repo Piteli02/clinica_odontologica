@@ -20,9 +20,9 @@ typedef struct
 //Estrutura dos pacientes
 typedef struct 
 {
-	int cpf_paciente;
-	char nome[20];
-	int telefone;
+	char nome[30];
+	char cpf[15];
+	char telefone[11];
 }Paciente;
 
 //Estrutura da consulta
@@ -49,6 +49,9 @@ void escolha_menu(int operador);
 //Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
 void verificar_login(char usuario_entrada[20], char senha_entrada[20]);
 
+
+void cadastrar_clientes();
+
 int main(){
 
 	int operador = 0;
@@ -58,7 +61,7 @@ int main(){
 	file_login = fopen("login.txt", "r"); // "r" - porque quero pegar informacao do arquivo
 	//Caso o usuario n tenha colocado o txt na mesma pasta que o executavel
 	if(file_login== NULL){
-		system("clear"); //limpar terminal windows
+		system("cls"); //limpar terminal windows
 		printf("\nERRO: Insira o arquivo 'login.txt' na mesma pasta que o executavel!!\n");
 		exit (0);
 	}
@@ -76,7 +79,7 @@ int main(){
 }
 
 void fazer_login(){
-	system("clear"); //limpar terminal windows
+	system("cls"); //limpar terminal windows
 
 	char usuario_entrada[20], senha_entrada[20];
 
@@ -102,7 +105,7 @@ void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
 	
 	while(verificar_senha != 0 || verificar_usuario != 0){
 
-			system("clear"); //limpar terminal windows
+			system("cls"); //limpar terminal windows
 
 			printf("--------------------LOGIN OU SENHA INCORRETO--------------------\n");
 
@@ -127,7 +130,7 @@ int menu_principal(){
 
 	int controlador_menu_principal=0;
 
-	system("clear"); //limpar terminal windows
+	system("cls"); //limpar terminal windows
 	
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
@@ -146,7 +149,7 @@ int menu_principal(){
 		scanf("%d",&escolha_menu_func);
 
 		controlador_menu_principal++;
-		system("clear"); //limpar terminal windows
+		system("cls"); //limpar terminal windows
 	}
 
 	return escolha_menu_func;
@@ -157,7 +160,7 @@ void escolha_menu(int operador){
 	switch(operador)
 	{
 		case 1:
-			printf("FUNCAO PARA CADASTRAR NOVO CLIENTE\n");
+			cadastrar_clientes();
 			break;
 		case 2:
 			printf("FUNCAO PARA AGENDAR NOVA CONSULTA\n");
@@ -171,6 +174,58 @@ void escolha_menu(int operador){
 		case 5:
 			printf("FUNCAO PARA VISUALIZAR CONSULTAS DO PACIENTE\n");
 			break;
+	}
+
+}
+
+void cadastrar_clientes(){
+
+	char controle = 's';
+
+	//Seleciono o arquivo com o login e senha_setada	
+	FILE *file_pacientes;
+	file_pacientes = fopen("pacientes.txt", "a"); // "a" - porque quero "append" informações no arquivo
+
+	//Caso o usuario n tenha colocado o txt na mesma pasta que o executavel
+	if(file_pacientes== NULL){
+		system("cls"); //limpar terminal windows
+		printf("\nERRO: Insira o arquivo 'pacientes.txt' na mesma pasta que o executavel!!\n");
+		exit (0);
+	}
+
+	Paciente paciente;
+
+	while(controle=='s'){
+		system("cls");
+
+		printf("--------------------CADASTRO NOVO PACIENTE--------------------\n");
+
+		fflush(stdin);
+		printf("Insira o nome do paciente a ser cadastrado: ");
+		fgets(paciente.nome,30,stdin);
+		paciente.nome[strcspn(paciente.nome, "\n")] = 0; //tirando o "\n" da string
+
+		fflush(stdin);
+		printf("Insira o cpf do paciente no modelo ***.***.***.** : ");
+		fgets(paciente.cpf,15,stdin);
+		paciente.cpf[strcspn(paciente.cpf, "\n")] = 0; //tirando o "\n" da string
+
+		fflush(stdin);
+		printf("Insira o telefone do paciente: ");
+		fgets(paciente.telefone,11,stdin);
+		paciente.telefone[strcspn(paciente.telefone, "\n")] = 0; //tirando o "\n" da string
+
+		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informações no arquivo
+
+		system("cls");
+
+		fflush(stdin);
+		printf("Deseja cadastrar outro paciente (s/n): ");
+		controle = getchar();
+		while(controle!='s' && controle!='n'){
+			printf("Use ""s"" minusculo ou ""n"" minusculo: ");
+			controle = getchar();
+		}
 	}
 
 }
