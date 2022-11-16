@@ -77,3 +77,7 @@ Toda vez que o usuário rodar o programa, será solicitado um usuário e senha, 
 - Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
 - Um paciente só pode ter uma consulta por dia;
 - Caso o programa seja rodado em um computador com o sistema LINUX, pode ser que ele não rode apropriadamente, tendo em vista que que o comando "fflush(stdin)" não apresenta um comportamenteo adequado e será modificado em breve
+
+
+## OBSERVAÇÃO:
+Após um funcionamentoa adequado do software, seria interessante que a cada vez que o admistrador fizer login, seja possível inserir a data do dia, desse modo, as consultas anteriores a essa data escrita devem ser excluidas do TXT.
