@@ -18,14 +18,18 @@ O programa vai ser desenvolvido na linguagem C e toda a interação do usuário 
 ## Tecnologia utilizada
 - Linguagem C;
 
+## Requisitos
+Nessa fase inicial, será necessário que a máquina possua um compilador C, como por exemplo o "GNU Compiler Collection - gcc". Assim, toda vez que o programa for rodar, é necessário compila-lo e posteriormente rodar.
+
 ## Como rodar a aplicação
 #### Primeira vez utilizando o software:
-- Fazer download do executável;
-- Fazer download dos txt "login.txt" "consultas.txt";
+- Fazer download do "Main.c";
+- Fazer download dos dos arquivos ".txt";
 - Colocar todos os arquivos na mesma pasta;
-- Clicar sobre o icone executável;
+- Compilar o arquivo "Main.c"
+- Rodar o arquivo "Main.c"
 #### Demais vezes utilizando o software
-- Clicar sobre o icone executável;
+- Rodar o arquivo "Main.c"
 
 ## Divisao de atividades segundo os autores
 
