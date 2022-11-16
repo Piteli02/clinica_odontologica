@@ -1,4 +1,4 @@
-# Clinica odontológica
+# :tooth:Clinica odontológica
 Repositório como projeto final da disciplina Si200B UNICAMP-FT.
 
 O intuito do programa eh basicamente criar um "CRUD" na linguagem C, onde será possivel:
@@ -15,13 +15,13 @@ O intuito do programa eh basicamente criar um "CRUD" na linguagem C, onde será 
 
 O programa vai ser desenvolvido na linguagem C e toda a interação do usuário será, através do terminal.
 
-## Tecnologia utilizada
+## :gear:Tecnologia utilizada
 - Linguagem C;
 
-## Requisitos
+## :gear:Requisitos
 Nessa fase inicial, será necessário que a máquina possua um compilador C, como por exemplo o "GNU Compiler Collection - gcc". Assim, toda vez que o programa for rodar, é necessário compila-lo e posteriormente rodar.
 
-## Como rodar a aplicação
+## :gear:Como rodar a aplicação
 #### Primeira vez utilizando o software:
 - Fazer download do "Main.c";
 - Fazer download dos dos arquivos ".txt";
@@ -31,7 +31,10 @@ Nessa fase inicial, será necessário que a máquina possua um compilador C, com
 #### Demais vezes utilizando o software
 - Rodar o arquivo "Main.c"
 
-## Divisao de atividades segundo os autores
+## :gear:Utilizando a aplicacao
+Toda vez que o usuário rodar o programa, será solicitado um usuário e senha, esse usuário e senha devem ser colocados no arquivo "login.txt". Caso isso não seja alterado, o padrão será Usuário:"adm" Senha:"adm10".
+
+## :safety_vest:Divisao de atividades segundo os autores
 
 #### Eduardo Longhi:
 
@@ -70,6 +73,6 @@ Nessa fase inicial, será necessário que a máquina possua um compilador C, com
 	responsável pela utilização de software pode fazer essa consulta rapidamente.
 
 
-## RESTRIÇÕES:
+## :stop_sign:RESTRIÇÕES:
 - Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
 - Um paciente só pode ter uma consulta por dia;
