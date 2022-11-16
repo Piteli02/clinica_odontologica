@@ -133,7 +133,7 @@ void menu_principal(){
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
 	//Usuario escolhe o que ele vai fazer no software a partir de um numero
-	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5){
+	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5 && escolha_menu_func != 6){
 		if(controlador_menu_principal!=0){
 			printf("--------------------OPCAO INVALIDA, TENTE NOVAMENTE--------------------\n");
 		}
@@ -142,7 +142,8 @@ void menu_principal(){
 		printf("2 para AGENDAR NOVA CONSULTA\n");
 		printf("3 para ALTERAR CONSULTA EXISTENTE\n");
 		printf("4 para VISUALIZAR CONSULTAS DO DIA\n");
-		printf("5 para VISUALIZAR CONSULTAS DO PACIENTE\n\n");
+		printf("5 para VISUALIZAR CONSULTAS DO PACIENTE\n");
+		printf("6 para FECHAR O PROGRAMA\n\n");
 		printf("Escolha: ");
 		scanf("%d",&escolha_menu_func);
 
@@ -171,6 +172,9 @@ void escolha_menu(int operador){
 			break;
 		case 5:
 			printf("FUNCAO PARA VISUALIZAR CONSULTAS DO PACIENTE\n");
+			break;
+		case 6:
+			exit(0);
 			break;
 	}
 
