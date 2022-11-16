@@ -76,3 +76,4 @@ Toda vez que o usuário rodar o programa, será solicitado um usuário e senha, 
 ## :stop_sign:RESTRIÇÕES:
 - Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
 - Um paciente só pode ter uma consulta por dia;
+- Caso o programa seja rodado em um computador com o sistema LINUX, pode ser que ele não rode apropriadamente, tendo em vista que que o comando "fflush(stdin)" não apresenta um comportamenteo adequado e será modificado em breve
