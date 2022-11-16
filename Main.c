@@ -221,6 +221,8 @@ void cadastrar_clientes(){
 		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informações no arquivo
 
 		system("cls");
+		
+		fclose(file_pacientes);
 
 		//checar se devo receber outro paciente ou se devo ir ao menu
 		fflush(stdin);
