@@ -22,7 +22,7 @@ typedef struct
 {
 	char nome[50];
 	char cpf[15];
-	char telefone[11];
+	char telefone[15];
 }Paciente;
 
 //Estrutura da consulta
@@ -49,8 +49,13 @@ void escolha_menu(int operador);
 //Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
 void verificar_login(char usuario_entrada[20], char senha_entrada[20]);
 
+void verificar_cpf(char cpf[15]);
+
+void verificar_tel(char tel[15]);
 
 void cadastrar_clientes();
+
+
 
 int main(){
 
@@ -72,6 +77,7 @@ int main(){
 	fazer_login();
 
 	menu_principal();
+
 
 	return 0;
 }
@@ -133,7 +139,7 @@ void menu_principal(){
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
 	//Usuario escolhe o que ele vai fazer no software a partir de um numero
-	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5 && escolha_menu_func != 6){
+	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5  && escolha_menu_func != 6){
 		if(controlador_menu_principal!=0){
 			printf("--------------------OPCAO INVALIDA, TENTE NOVAMENTE--------------------\n");
 		}
@@ -143,7 +149,7 @@ void menu_principal(){
 		printf("3 para ALTERAR CONSULTA EXISTENTE\n");
 		printf("4 para VISUALIZAR CONSULTAS DO DIA\n");
 		printf("5 para VISUALIZAR CONSULTAS DO PACIENTE\n");
-		printf("6 para FECHAR O PROGRAMA\n\n");
+		printf("6 para ENCERRAR O SISTEMA \n");
 		printf("Escolha: ");
 		scanf("%d",&escolha_menu_func);
 
@@ -175,13 +181,12 @@ void escolha_menu(int operador){
 			break;
 		case 6:
 			exit(0);
-			break;
 	}
 
 }
 
 void cadastrar_clientes(){
-
+	
 	char controle = 's';
 
 	//Seleciono o arquivo com o login e senha_setada	
@@ -200,7 +205,6 @@ void cadastrar_clientes(){
 	//loop para definir ate quando eu vou cadastrar clientes novos
 	while(controle=='s'){
 		system("cls");
-
 		printf("--------------------CADASTRO NOVO PACIENTE--------------------\n");
 
 		fflush(stdin);
@@ -211,19 +215,24 @@ void cadastrar_clientes(){
 		fflush(stdin);
 		printf("Insira o cpf do paciente no modelo ***.***.***.** : ");
 		fgets(paciente.cpf,15,stdin);
-		paciente.cpf[strcspn(paciente.cpf, "\n")] = 0; //tirando o "\n" da string
+		paciente.cpf[strcspn(paciente.cpf, "\n")] = 0; //tirando o "\n" da string		
+		
+		verificar_cpf(paciente.cpf);
 
 		fflush(stdin);
-		printf("Insira o telefone do paciente: ");
-		fgets(paciente.telefone,11,stdin);
+		printf("Insira o telefone do paciente no modelo (**)*****-****: ");
+		fgets(paciente.telefone,15,stdin);
 		paciente.telefone[strcspn(paciente.telefone, "\n")] = 0; //tirando o "\n" da string
-
+		
+		verificar_tel(paciente.telefone);
+	
+		
+		
 		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informações no arquivo
 
 		system("cls");
-		
 		fclose(file_pacientes);
-
+		
 		//checar se devo receber outro paciente ou se devo ir ao menu
 		fflush(stdin);
 		printf("Deseja cadastrar outro paciente (s/n): ");
@@ -237,3 +246,64 @@ void cadastrar_clientes(){
 	menu_principal();
 
 }
+
+void verificar_cpf(char cpf[15]){
+	
+	int i, cont = 0;
+	
+	do{	
+		cont = 0;
+		for(i = 0; i < 15; i++){
+			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
+			if(cpf[i] > 58 ){
+				cont++;
+				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
+				fflush(stdin);
+				fgets(cpf,15,stdin);
+				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
+			}
+		}	
+		if(cpf[3] != '.' || cpf[7] != '.' || cpf[11] != '.'){
+			cont++;
+				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
+				fflush(stdin);
+				fgets(cpf,15,stdin);
+				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
+		}
+	}while(cont > 0);
+
+}
+
+void verificar_tel(char tel[15]){
+	
+	int i, cont = 0;
+	
+	do{	
+		cont = 0;
+		for(i = 0; i < 15; i++){
+			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
+			if(tel[i] > 58 ){
+				cont++;
+				printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
+				fflush(stdin);
+				fgets(tel,15,stdin);
+				tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
+			}
+		}	
+		if(tel[0] != '(' || tel[3] != ')' || tel[9] != '-'){
+			cont++;
+			printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
+			fflush(stdin);
+			fgets(tel,15,stdin);
+			tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
+		}
+	}while(cont > 0);
+
+}
+
+
+		
+
+
+
+
