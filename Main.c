@@ -28,10 +28,12 @@ typedef struct
 //Estrutura da consulta
 typedef struct
 {
-	int cod_consulta;
-	Paciente paciente_da_consulta;
-	Hora hora_consulta;
-	Data data_consulta;
+	int dia;
+	int mes;
+	int ano;
+	int hora; 
+	int minuto;
+	char cpf[15];
 }Consulta;
 
 //Variaveis com o usuario e senha do txt
@@ -43,7 +45,7 @@ void fazer_login();
 //Opcoes de escolha para o que fazer no software
 void menu_principal();
 
-//Sequencia depois de ter decidido o que será feito no sofware
+//Sequencia depois de ter decidido o que ser� feito no sofware
 void escolha_menu(int operador);
 
 //Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
@@ -161,6 +163,10 @@ void menu_principal(){
 }
 
 void escolha_menu(int operador){
+	Consulta *agenda[100];   
+	// a agenda ser� um vetor de Consultas
+	char arq[] = {"agenda.txt"};
+	int tamanho = 100, quantidade = 0;
 	
 	switch(operador)
 	{
@@ -168,7 +174,9 @@ void escolha_menu(int operador){
 			cadastrar_clientes();
 			break;
 		case 2:
-			printf("FUNCAO PARA AGENDAR NOVA CONSULTA\n");
+			quantidade += marcar_consulta(agenda, quantidade, tamanho);
+			salvar(agenda, quantidade, arq);
+			menu_principal();
 			break;
 		case 3:
 			printf("FUNCAO PARA ALTERAR CONSULTA EXISTENTE\n");
@@ -191,7 +199,7 @@ void cadastrar_clientes(){
 
 	//Seleciono o arquivo com o login e senha_setada	
 	FILE *file_pacientes;
-	file_pacientes = fopen("pacientes.txt", "a"); // "a" - porque quero "append" informações no arquivo
+	file_pacientes = fopen("pacientes.txt", "a"); // "a" - porque quero "append" informa��es no arquivo
 
 	//Caso o usuario n tenha colocado o txt na mesma pasta que o executavel
 	if(file_pacientes== NULL){
@@ -228,7 +236,7 @@ void cadastrar_clientes(){
 	
 		
 		
-		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informações no arquivo
+		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informa��es no arquivo
 
 		system("cls");
 		fclose(file_pacientes);
@@ -301,7 +309,44 @@ void verificar_tel(char tel[15]){
 
 }
 
+int marcar_consulta(Consulta **c, int quantidade, int tamanho){
 
+    if(quantidade < tamanho){
+        Consulta *novo = malloc(sizeof(Consulta));
+
+        printf("\nDigite o CPF do paciente: ");
+        scanf("%s", &novo->cpf);
+        verificar_cpf(novo->cpf);
+        void verificar_cpf(char cpf[15]);
+        printf("\nDigite a data da consulta dd mm aaaa: ");
+        scanf("%d%d%d", &novo->dia, &novo->mes, &novo->ano);
+        printf("\nDigite o horario da consulta hh mm: ");
+        scanf("%d%d", &novo->hora, &novo->minuto);
+        getchar();
+        c[quantidade] = novo;
+        return 1;
+    }
+    else{
+        printf("\n\tImpossivel novo cadastro. Vetor cheio!\n");
+        return 0;
+    }
+}
+
+void salvar(Consulta **c, int quantidade, char arq[]){
+	    FILE *file = fopen(arq, "a");
+	    int i;
+	
+	    if(file){
+	        for(i = 0; i < quantidade; i++){
+	            fputs(c[i]->cpf, file);
+	            fprintf(file, " %d/%d/%d ", c[i]->dia, c[i]->mes, c[i]->ano);
+	            fprintf(file, "%d:%d\n", c[i]->hora, c[i]->minuto);
+	        }
+	        fclose(file);
+	    }
+	    else
+	        printf("\n\tNAO FOI POSSIVEL ABRIR/CRIAR O ARQUIVO!\n");
+}
 		
 
 
