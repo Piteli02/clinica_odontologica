@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 //Estrutura da hora
 typedef struct
@@ -58,11 +57,14 @@ void verificar_tel(char tel[15]);
 
 void cadastrar_clientes();
 
-void alterar_consulta();
 
-void salvar(Consulta **c, int quantidade, char arq[]);
+void achar_consultas_cpf();
 
-int marcar_consulta(Consulta **c, int quantidade, int tamanho);
+void achar_consultas_dia();
+
+void verificar_paciente_cadastrado(char cpf[15]);
+
+void excluir_consulta();
 
 
 int main(){
@@ -147,7 +149,7 @@ void menu_principal(){
 	printf("--------------------MENU PRINCIPAL--------------------\n");
 
 	//Usuario escolhe o que ele vai fazer no software a partir de um numero
-	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5  && escolha_menu_func != 6){
+	while(escolha_menu_func==0 || escolha_menu_func != 1 && escolha_menu_func != 2 && escolha_menu_func != 3 && escolha_menu_func != 4 && escolha_menu_func != 5  && escolha_menu_func != 6 && escolha_menu_func != 7){
 		if(controlador_menu_principal!=0){
 			printf("--------------------OPCAO INVALIDA, TENTE NOVAMENTE--------------------\n");
 		}
@@ -157,7 +159,8 @@ void menu_principal(){
 		printf("3 para ALTERAR CONSULTA EXISTENTE\n");
 		printf("4 para VISUALIZAR CONSULTAS DO DIA\n");
 		printf("5 para VISUALIZAR CONSULTAS DO PACIENTE\n");
-		printf("6 para ENCERRAR O SISTEMA \n");
+		printf("6 para EXCLUIR CONSULTA\n");
+		printf("7 para ENCERRAR O SISTEMA \n");
 		printf("Escolha: ");
 		scanf("%d",&escolha_menu_func);
 
@@ -185,15 +188,21 @@ void escolha_menu(int operador){
 			menu_principal();
 			break;
 		case 3:
-			alterar_consulta();
+			printf("FUNCAO PARA ALTERAR CONSULTA EXISTENTE\n");
 			break;
 		case 4:
-			printf("FUNCAO PARA VISUALIZAR CONSULTAS DO DIA\n");
+			achar_consultas_dia();
+			menu_principal();
 			break;
 		case 5:
-			printf("FUNCAO PARA VISUALIZAR CONSULTAS DO PACIENTE\n");
+			achar_consultas_cpf();
+			menu_principal();
 			break;
 		case 6:
+			excluir_consulta();
+			menu_principal();
+			break;
+		case 7:
 			exit(0);
 	}
 
@@ -242,7 +251,7 @@ void cadastrar_clientes(){
 	
 		
 		
-		fprintf(file_pacientes, "%s %s %s\n", paciente.cpf, paciente.nome, paciente.telefone); //colocando as informa��es no arquivo
+		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informa��es no arquivo
 
 		system("cls");
 		fclose(file_pacientes);
@@ -319,11 +328,16 @@ int marcar_consulta(Consulta **c, int quantidade, int tamanho){
 
     if(quantidade < tamanho){
         Consulta *novo = malloc(sizeof(Consulta));
-		printf("--------------------AGENDAR NOVA CONSULTA--------------------\n");
+
         printf("\nDigite o CPF do paciente: ");
         scanf("%s", &novo->cpf);
         verificar_cpf(novo->cpf);
+<<<<<<< Updated upstream
+        void verificar_cpf(char cpf[15]);
+=======
+		verificar_paciente_cadastrado(novo->cpf);
         void verificar_cpf(char cpf[15]); //O QUE É ISSO ----------------------------------
+>>>>>>> Stashed changes
         printf("\nDigite a data da consulta dd mm aaaa: ");
         scanf("%d%d%d", &novo->dia, &novo->mes, &novo->ano);
         printf("\nDigite o horario da consulta hh mm: ");
@@ -348,14 +362,18 @@ void salvar(Consulta **c, int quantidade, char arq[]){
 	            fprintf(file, " %d/%d/%d ", c[i]->dia, c[i]->mes, c[i]->ano);
 	            fprintf(file, "%d:%d\n", c[i]->hora, c[i]->minuto);
 	        }
-
 	        fclose(file);
 	    }
 	    else
 	        printf("\n\tNAO FOI POSSIVEL ABRIR/CRIAR O ARQUIVO!\n");
 }
+		
+
+<<<<<<< Updated upstream
 
 
+
+=======
 /*
 Essa função vai ser responsável por receber uma consulta a qual deverá ser alterada
 Todas as outras consultas serão escritas em um arquivo chamado "temp_agenda"
@@ -372,10 +390,8 @@ void alterar_consulta(){
 	char arq[] = {"agenda.txt"};
 	int tamanho = 100, quantidade = 0;
 
-
 	int vezes_errado=0; //variavel que fala se o cara errou a digitação da consulta que ele queria
 	bool consulta_encontrada=false; 
-	char nova_consulta[100];
 	char consulta_procurar[100];
 	char consulta_do_arquivo[100];
 	bool continuar_lendo_arq = true;
@@ -399,7 +415,12 @@ void alterar_consulta(){
 
 		//se tiver inserido a consulta a ser procurada erroneamente, ele printa que escreveu errado e manda escerver dnv
 		if(vezes_errado==0){
-			printf("--------------------QUAL CONSULTA DEVEMOS ALTERAR--------------------\n FORMATO DE ENTRADA: ***.***.***.** dd/mm/aaaa hr:min\n ");
+			printf("Nessa tela, todas as consultas do cpf a ser procurado serao exibidas, COPIE A CONSULTA A SER ALTERADA");
+			printf("\nAperte uma tecla para continuar...");
+			getch();
+			achar_consultas_cpf();
+			system("cls");
+			printf("Insira a consulta a ser alterada: ");
 		}else{
 			printf("**Consulta nao encontrada\n\n");
 			printf("--------------------TENTE NOVAMENTE--------------------\n");
@@ -448,6 +469,11 @@ void alterar_consulta(){
 
 	system("cls");
 
+
+	printf("Consulta excluida com sucesso! Agora, vamos marcar a consulta que substituira a anterior!");
+	printf("\nAperte uma tecla para continuar...");
+	getch();
+	system("cls");
 	//chamando a  função pra marcar a consulta a qual substituira a que eu acabei de excluir
 	quantidade += marcar_consulta(agenda, quantidade, tamanho);
 	salvar(agenda, quantidade, arq);
@@ -455,3 +481,209 @@ void alterar_consulta(){
 	//voltar para o menu principal
 	menu_principal();
 }
+
+void achar_consultas_cpf(){
+	char cpf[15];
+	
+
+	system("cls");
+
+	printf("--------------------CPF A SER PROCURADO--------------------\n");
+	printf("Insira o cpf: ");
+	fflush(stdin);
+	fgets(cpf,15,stdin);
+	verificar_cpf(cpf);
+	verificar_paciente_cadastrado(cpf);
+
+	system("cls");
+	printf("--------------------CONSULTAS DESSE CPF--------------------\n");
+	FILE *file_agenda;
+	file_agenda = fopen("agenda.txt", "r");
+
+	char consulta_do_arquivo[50];
+
+	if(file_agenda==NULL){
+		system("cls");
+		printf("!!Nao foi possivel abrir o arqivo!!");
+		exit(1);
+	}
+
+	while(!feof(file_agenda)){
+		fgets(consulta_do_arquivo,50,file_agenda);
+		if(strstr(consulta_do_arquivo,cpf)!=NULL){
+			printf("%s", consulta_do_arquivo);
+		}
+	}
+
+	fclose(file_agenda);
+	
+	printf("Clique alguma coisa para continuar...");
+	getch();
+}
+
+void achar_consultas_dia(){
+	char data[10];
+	
+
+	system("cls");
+
+	printf("--------------------DATA A SER PROCURADA--------------------\n");
+	printf("Insira a data: ");
+	fflush(stdin);
+	fgets(data,10,stdin);
+
+	system("cls");
+	printf("--------------------CONSULTAS NESSE DIA--------------------\n");
+	FILE *file_agenda;
+	file_agenda = fopen("agenda.txt", "r");
+
+	char consulta_do_arquivo[50];
+
+	if(file_agenda==NULL){
+		system("cls");
+		printf("!!Nao foi possivel abrir o arqivo!!");
+		exit(1);
+	}
+
+	while(!feof(file_agenda)){
+		fgets(consulta_do_arquivo,50,file_agenda);
+		if(strstr(consulta_do_arquivo,data)!=NULL){
+			printf("%s", consulta_do_arquivo);
+		}
+	}
+
+	fclose(file_agenda);
+	fflush(stdin);
+	printf("Clique alguma coisa para continuar...");
+	getch();
+}
+
+void verificar_paciente_cadastrado(char cpf[15]){
+	int paciente_existe = 0;
+	int controlador = 0;
+
+	FILE *file_paciente;
+	file_paciente = fopen("pacientes.txt", "r");
+
+	char consulta_do_arquivo[100];
+
+	if(file_paciente==NULL){
+		printf("ERRO AO ABRIR O ARQUIVO");
+		exit(1);
+	}
+
+	do{
+		if(controlador!=0){
+			system("cls");
+			printf("--------------------PACIENTE NAO EXISTE--------------------\n");
+			printf("Insira o cpf novamente:");
+			fflush(stdin);
+			fgets(cpf,15,stdin);
+			verificar_cpf(cpf);
+			fclose(file_paciente);
+			FILE *file_paciente;
+			file_paciente = fopen("pacientes.txt", "r");
+		}
+		while(!feof(file_paciente)){
+			fgets(consulta_do_arquivo,100,file_paciente);
+			if(strstr(consulta_do_arquivo,cpf)!=NULL){
+				paciente_existe = 1;
+			}
+		}
+		controlador++;
+	}while(paciente_existe==0);
+
+	fclose(file_paciente);
+
+}
+
+void excluir_consulta(){
+	system("cls");
+
+	int vezes_errado=0; //variavel que fala se o cara errou a digitação da consulta que ele queria
+	bool consulta_encontrada=false; 
+	char consulta_procurar[100];
+	char consulta_do_arquivo[100];
+	bool continuar_lendo_arq = true;
+
+	//abrindo arquivos
+	FILE *file_agenda;
+	file_agenda = fopen("agenda.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+	FILE *temp_file_agenda;
+	temp_file_agenda = fopen("temp_agenda.txt","w");
+
+	//apontando erro caso os arquivos não sejam abertos corretamente
+	if(file_agenda==NULL || temp_file_agenda == NULL){
+		system("cls");
+		printf("!!Falha ao abrir o arquivo!!");
+		exit(1);
+	} 
+
+	//percorrer linha por linha do txt, procurando pela consulta inserida
+	while(consulta_encontrada==false){
+		system("cls");
+
+		//se tiver inserido a consulta a ser procurada erroneamente, ele printa que escreveu errado e manda escerver dnv
+		if(vezes_errado==0){
+			printf("Nessa tela, todas as consultas do cpf a ser procurado serao exibidas, COPIE A CONSULTA A SER EXCLUIDA");
+			printf("\nAperte uma tecla para continuar...");
+			getch();
+			achar_consultas_cpf();
+			system("cls");
+			printf("Insira a consulta a ser EXCLUIDA: ");
+		}else{
+			printf("**Consulta nao encontrada\n\n");
+			printf("--------------------TENTE NOVAMENTE--------------------\n");
+			printf("FORMATO: ***.***.***.** dd/mm/aaaa hr:min\n");
+
+			//devo fechar os arquivos e abrir de novo, para ele recomeçar a passar pelas linhas, caso contrario ele tenta continuar a partir do final do arquivo
+			fclose(file_agenda);
+			fclose(temp_file_agenda);
+			
+			//abrindo os arquivos após ter fechado
+			file_agenda = fopen("agenda.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+			temp_file_agenda = fopen("temp_agenda.txt","w");
+		}
+
+		//recebendo a consulta a ser procurada, para ser alterada
+		fflush(stdin);
+		fgets(consulta_procurar,100,stdin);
+
+		//de fato, achando a consulta a ser procurada
+		do{
+		fgets(consulta_do_arquivo,100,file_agenda);
+
+		if(feof(file_agenda)){
+			continuar_lendo_arq=false;
+		} else{
+			if(strcmp(consulta_procurar,consulta_do_arquivo)==0){
+				consulta_encontrada=true;
+				
+				continue;
+			}else{
+				fputs(consulta_do_arquivo, temp_file_agenda);
+			}
+		}
+	}while(continuar_lendo_arq);
+
+	vezes_errado++;
+	continuar_lendo_arq=true;
+	}
+
+	fclose(file_agenda);
+	fclose(temp_file_agenda);
+
+	//eu exluo a agenda, e renomeio o arquivo que era temporario, assim, ele passa a ser o de verdade
+	remove("agenda.txt");
+	rename("temp_agenda.txt", "agenda.txt");
+
+	system("cls");
+
+
+	printf("Consulta excluida com sucesso!");
+	printf("\nAperte uma tecla para continuar...");
+	getch();
+	system("cls");
+
+}
+>>>>>>> Stashed changes
