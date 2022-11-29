@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 //Estrutura da hora
 typedef struct
@@ -57,6 +58,11 @@ void verificar_tel(char tel[15]);
 
 void cadastrar_clientes();
 
+void alterar_consulta();
+
+void salvar(Consulta **c, int quantidade, char arq[]);
+
+int marcar_consulta(Consulta **c, int quantidade, int tamanho);
 
 
 int main(){
@@ -179,7 +185,7 @@ void escolha_menu(int operador){
 			menu_principal();
 			break;
 		case 3:
-			printf("FUNCAO PARA ALTERAR CONSULTA EXISTENTE\n");
+			alterar_consulta();
 			break;
 		case 4:
 			printf("FUNCAO PARA VISUALIZAR CONSULTAS DO DIA\n");
@@ -236,7 +242,7 @@ void cadastrar_clientes(){
 	
 		
 		
-		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informa��es no arquivo
+		fprintf(file_pacientes, "%s %s %s\n", paciente.cpf, paciente.nome, paciente.telefone); //colocando as informa��es no arquivo
 
 		system("cls");
 		fclose(file_pacientes);
@@ -313,11 +319,11 @@ int marcar_consulta(Consulta **c, int quantidade, int tamanho){
 
     if(quantidade < tamanho){
         Consulta *novo = malloc(sizeof(Consulta));
-
+		printf("--------------------AGENDAR NOVA CONSULTA--------------------\n");
         printf("\nDigite o CPF do paciente: ");
         scanf("%s", &novo->cpf);
         verificar_cpf(novo->cpf);
-        void verificar_cpf(char cpf[15]);
+        void verificar_cpf(char cpf[15]); //O QUE É ISSO ----------------------------------
         printf("\nDigite a data da consulta dd mm aaaa: ");
         scanf("%d%d%d", &novo->dia, &novo->mes, &novo->ano);
         printf("\nDigite o horario da consulta hh mm: ");
@@ -342,13 +348,110 @@ void salvar(Consulta **c, int quantidade, char arq[]){
 	            fprintf(file, " %d/%d/%d ", c[i]->dia, c[i]->mes, c[i]->ano);
 	            fprintf(file, "%d:%d\n", c[i]->hora, c[i]->minuto);
 	        }
+
 	        fclose(file);
 	    }
 	    else
 	        printf("\n\tNAO FOI POSSIVEL ABRIR/CRIAR O ARQUIVO!\n");
 }
-		
 
 
+/*
+Essa função vai ser responsável por receber uma consulta a qual deverá ser alterada
+Todas as outras consultas serão escritas em um arquivo chamado "temp_agenda"
+Desse moodo, no final, o "temp_agenda" vai posuir todas as consultas, menos a que eu quero alterar
+Eu excluo o arquivo que tinha a consulta que eu selecionei para alterar
+Faço o arquivo que já possui a exclusão passar a ser o meu "agenda" de verdade
+Printo a nova consulta (que substitui a excluida) no arquivo
+*/
+void alterar_consulta(){
+	system("cls");
+	
+	//variaveis para chamar a função de agendar consulta
+	Consulta *agenda[100];   
+	char arq[] = {"agenda.txt"};
+	int tamanho = 100, quantidade = 0;
 
 
+	int vezes_errado=0; //variavel que fala se o cara errou a digitação da consulta que ele queria
+	bool consulta_encontrada=false; 
+	char nova_consulta[100];
+	char consulta_procurar[100];
+	char consulta_do_arquivo[100];
+	bool continuar_lendo_arq = true;
+
+	//abrindo arquivos
+	FILE *file_agenda;
+	file_agenda = fopen("agenda.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+	FILE *temp_file_agenda;
+	temp_file_agenda = fopen("temp_agenda.txt","w");
+
+	//apontando erro caso os arquivos não sejam abertos corretamente
+	if(file_agenda==NULL || temp_file_agenda == NULL){
+		system("cls");
+		printf("!!Falha ao abrir o arquivo!!");
+		exit(1);
+	} 
+
+	//percorrer linha por linha do txt, procurando pela consulta inserida
+	while(consulta_encontrada==false){
+		system("cls");
+
+		//se tiver inserido a consulta a ser procurada erroneamente, ele printa que escreveu errado e manda escerver dnv
+		if(vezes_errado==0){
+			printf("--------------------QUAL CONSULTA DEVEMOS ALTERAR--------------------\n FORMATO DE ENTRADA: ***.***.***.** dd/mm/aaaa hr:min\n ");
+		}else{
+			printf("**Consulta nao encontrada\n\n");
+			printf("--------------------TENTE NOVAMENTE--------------------\n");
+			printf("FORMATO: ***.***.***.** dd/mm/aaaa hr:min\n");
+
+			//devo fechar os arquivos e abrir de novo, para ele recomeçar a passar pelas linhas, caso contrario ele tenta continuar a partir do final do arquivo
+			fclose(file_agenda);
+			fclose(temp_file_agenda);
+			
+			//abrindo os arquivos após ter fechado
+			file_agenda = fopen("agenda.txt", "r"); // "r" - porque quero pegar informacao do arquivo
+			temp_file_agenda = fopen("temp_agenda.txt","w");
+		}
+
+		//recebendo a consulta a ser procurada, para ser alterada
+		fflush(stdin);
+		fgets(consulta_procurar,100,stdin);
+
+		//de fato, achando a consulta a ser procurada
+		do{
+		fgets(consulta_do_arquivo,100,file_agenda);
+
+		if(feof(file_agenda)){
+			continuar_lendo_arq=false;
+		} else{
+			if(strcmp(consulta_procurar,consulta_do_arquivo)==0){
+				consulta_encontrada=true;
+				
+				continue;
+			}else{
+				fputs(consulta_do_arquivo, temp_file_agenda);
+			}
+		}
+	}while(continuar_lendo_arq);
+
+	vezes_errado++;
+	continuar_lendo_arq=true;
+	}
+
+	fclose(file_agenda);
+	fclose(temp_file_agenda);
+
+	//eu exluo a agenda, e renomeio o arquivo que era temporario, assim, ele passa a ser o de verdade
+	remove("agenda.txt");
+	rename("temp_agenda.txt", "agenda.txt");
+
+	system("cls");
+
+	//chamando a  função pra marcar a consulta a qual substituira a que eu acabei de excluir
+	quantidade += marcar_consulta(agenda, quantidade, tamanho);
+	salvar(agenda, quantidade, arq);
+
+	//voltar para o menu principal
+	menu_principal();
+}
