@@ -1,3 +1,26 @@
+/*
+PROJETO FINAL DISCIPLINA SI200-PROGRAMAÇÃO 2
+
+UNIVERSIDADE ESTADUAL DE CAMPINAS - FACULDADE DE TECNOLOGIA (UNICAMP-FT)
+
+Link para o github - https://github.com/Piteli02/clinica_odontologica
+
+Codigo desenvolvido por::
+	-Andre Gomes de Lima Braga 234444
+	-Caio Gomes Piteli 234451
+	-Eduardo Longhi 237468
+	-Henrique Bexiga Eulalio 255002
+*/
+
+/*
+O usuario e senha pedidos no começo do sistema devem ser setados em um arquivo chamado
+"login.txt", o qual deve estar armazenado na mesma pasta que o "Main.c"
+No arquivo deve conter o usuario, seguido por um espaço e uma senha
+
+Exemplo:
+adm 123
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,24 +68,34 @@ void menu_principal();
 //Sequencia depois de ter decidido o que sera feito no sofware
 void escolha_menu(int operador);
 
-//Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
-void verificar_login(char usuario_entrada[20], char senha_entrada[20]);
-
-void verificar_cpf(char cpf[15]);
-
-void verificar_tel(char tel[15]);
-
 void cadastrar_clientes();
+
+int marcar_consulta(Consulta **c, int quantidade, int tamanho);
+
+void salvar(Consulta **c, int quantidade, char arq[]);
 
 void alterar_consulta();
 
-void achar_consultas_cpf();
-
+//Procuro e exibo todas as consultas daquele dia
 void achar_consultas_dia();
 
-void verificar_paciente_cadastrado(char cpf[15]);
+//Procuro e exibo todas as consultas daquele cpf
+void achar_consultas_cpf();
 
 void excluir_consulta();
+
+//Vejo se o usuario digitado eh o mesmo que o usuario presente no arquivo "file_login"
+void verificar_login(char usuario_entrada[20], char senha_entrada[20]);
+
+//Verifico se a entrada do cpf esta correta
+void verificar_cpf(char cpf[15]);
+
+//Verifica se a entrada do telefone esta correta
+void verificar_tel(char tel[15]);
+
+//Verifica se o paciente que vai marcar a consulta ja esta cadastrado
+void verificar_paciente_cadastrado(char cpf[15]);
+
 
 int main() {
 	int operador = 0;
@@ -103,29 +136,6 @@ void fazer_login() {
 	senha_entrada[strcspn(senha_entrada, "\n")] = 0; //tirando o "\n" da string
 
 	verificar_login(usuario_entrada, senha_entrada);
-}
-
-void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
-	int verificar_usuario, verificar_senha;
-	
-	verificar_usuario = strcmp(usuario_setado, usuario_entrada);
-	verificar_senha = strcmp(senha_setada, senha_entrada);
-	
-	while(verificar_senha != 0 || verificar_usuario != 0) {
-		system("cls"); //limpar terminal windows
-
-		printf("--------------------LOGIN OU SENHA INCORRETO--------------------\n");
-
-		printf("Digite o nome de usuario novamente: ");
-		fgets(usuario_entrada,20,stdin);
-		usuario_entrada[strcspn(usuario_entrada, "\n")] = 0; //tirando o "\n" da string
-		printf("Digite a sua senha novamente: ");
-		fgets(senha_entrada,20,stdin);
-		senha_entrada[strcspn(senha_entrada, "\n")] = 0; //tirando o "\n" da string
-
-		verificar_usuario = strcmp(usuario_setado, usuario_entrada);
-		verificar_senha = strcmp(senha_setada, senha_entrada);
-	}
 }
 
 void menu_principal() {
@@ -197,7 +207,6 @@ void escolha_menu(int operador) {
 }
 
 void cadastrar_clientes() {
-	char controle = 's';
 
 	//Seleciono o arquivo com o login e senha_setada	
 	FILE *file_pacientes;
@@ -212,120 +221,50 @@ void cadastrar_clientes() {
 
 	Paciente paciente;
 
-	//loop para definir ate quando eu vou cadastrar clientes novos
-	while(controle=='s') {
-		system("cls");
-		printf("--------------------CADASTRO NOVO PACIENTE--------------------\n");
+	system("cls");
+	printf("--------------------CADASTRO NOVO PACIENTE--------------------\n");
 
-		fflush(stdin);
-		printf("Insira o nome do paciente a ser cadastrado: ");
-		fgets(paciente.nome, 50, stdin);
-		paciente.nome[strcspn(paciente.nome, "\n")] = 0; //tirando o "\n" da string
+	fflush(stdin);
+	printf("Insira o nome do paciente a ser cadastrado: ");
+	fgets(paciente.nome, 50, stdin);
+	paciente.nome[strcspn(paciente.nome, "\n")] = 0; //tirando o "\n" da string
 
-		fflush(stdin);
-		printf("Insira o cpf do paciente no modelo ***.***.***.** : ");
-		fgets(paciente.cpf,15,stdin);
-		paciente.cpf[strcspn(paciente.cpf, "\n")] = 0; //tirando o "\n" da string		
+	fflush(stdin);
+	printf("Insira o cpf do paciente no modelo ***.***.***.** : ");
+	fgets(paciente.cpf,15,stdin);
+	paciente.cpf[strcspn(paciente.cpf, "\n")] = 0; //tirando o "\n" da string		
 		
-		verificar_cpf(paciente.cpf);
+	verificar_cpf(paciente.cpf);
 
-		fflush(stdin);
-		printf("Insira o telefone do paciente no modelo (**)*****-****: ");
-		fgets(paciente.telefone, 15, stdin);
-		paciente.telefone[strcspn(paciente.telefone, "\n")] = 0; //tirando o "\n" da string
+	fflush(stdin);
+	printf("Insira o telefone do paciente no modelo (**)*****-****: ");
+	fgets(paciente.telefone, 15, stdin);
+	paciente.telefone[strcspn(paciente.telefone, "\n")] = 0; //tirando o "\n" da string
 		
-		verificar_tel(paciente.telefone);
+	verificar_tel(paciente.telefone);
 	
-		fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informa��es no arquivo
+	fprintf(file_pacientes, "%s %s %s\n", paciente.nome, paciente.cpf, paciente.telefone); //colocando as informa��es no arquivo
 
-		system("cls");
-		fclose(file_pacientes);
+	system("cls");
+	fclose(file_pacientes);
 		
-		//checar se devo receber outro paciente ou se devo ir ao menu
-		fflush(stdin);
-		printf("Deseja cadastrar outro paciente (s/n): ");
-		controle = getchar();
-		
-		while(controle != 's' && controle != 'n') {
-			printf("Use ""s"" minusculo ou ""n"" minusculo: ");
-			controle = getchar();
-		}
-	}
+	fflush(stdin);
 	
 	menu_principal();
-}
-
-void verificar_cpf(char cpf[15]) {
-	int i, cont = 0;
-	
-	do {	
-		cont = 0;
-		for(i = 0; i < 15; i++) {
-			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
-			if(cpf[i] > 58 ) {
-				cont++;
-				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
-				fflush(stdin);
-				fgets(cpf,15,stdin);
-				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
-				system("cls");
-			}
-		}	
-		
-		if(cpf[3] != '.' || cpf[7] != '.' || cpf[11] != '.') {
-			cont++;
-				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
-				fflush(stdin);
-				fgets(cpf,15,stdin);
-				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
-				system("cls");
-		}
-		
-	} while(cont > 0);
-}
-
-void verificar_tel(char tel[15]) {
-	int i, cont = 0;
-	
-	do {	
-		cont = 0;
-		for(i = 0; i < 15; i++) {
-			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
-			if(tel[i] > 58 ) {
-				cont++;
-				printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
-				fflush(stdin);
-				fgets(tel,15,stdin);
-				tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
-				system("cls");
-			}
-		}
-		
-		if(tel[0] != '(' || tel[3] != ')' || tel[9] != '-') {
-			cont++;
-			printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
-			fflush(stdin);
-			fgets(tel,15,stdin);
-			tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
-			system("cls");
-		}
-	} while(cont > 0);
 }
 
 int marcar_consulta(Consulta **c, int quantidade, int tamanho) {
     if(quantidade < tamanho) {
         Consulta *novo = malloc(sizeof(Consulta));
-
+		printf("--------------------AGENDAR CONSULTA--------------------\n");
         printf("\nDigite o CPF do paciente: ");
         scanf("%s", &novo->cpf);
         verificar_cpf(novo->cpf);
-        void verificar_cpf(char cpf[15]);
 		verificar_paciente_cadastrado(novo->cpf);
-        void verificar_cpf(char cpf[15]); //O QUE É ISSO ----------------------------------
-        printf("\nDigite a data da consulta dd mm aaaa: ");
-        scanf("%d%d%d", &novo->dia, &novo->mes, &novo->ano);
-        printf("\nDigite o horario da consulta hh mm: ");
-        scanf("%d%d", &novo->hora, &novo->minuto);
+        printf("\nDigite a data da consulta dd/mm/aaaa: ");
+        scanf("%d/%d/%d", &novo->dia, &novo->mes, &novo->ano);
+        printf("\nDigite o horario da consulta hh:mm: ");
+        scanf("%d:%d", &novo->hora, &novo->minuto);
         getchar();
         c[quantidade] = novo;
         return 1;
@@ -350,8 +289,6 @@ void salvar(Consulta **c, int quantidade, char arq[]) {
 	    printf("\n\tERRO: Nao foi possivel ABRIR/CRIAR o arquivo!\n");
 	}
 }
-		
-
 
 /*
 ---------------------------------------------------------------------------------------------------
@@ -461,44 +398,6 @@ void alterar_consulta() {
 	menu_principal();
 }
 
-void achar_consultas_cpf() {
-	char cpf[15];
-	
-	system("cls");
-
-	printf("--------------------CPF A SER PROCURADO--------------------\n");
-	printf("Insira o cpf: ");
-	fflush(stdin);
-	fgets(cpf,15,stdin);
-	verificar_cpf(cpf);
-	verificar_paciente_cadastrado(cpf);
-
-	system("cls");
-	printf("--------------------CONSULTAS DESSE CPF--------------------\n");
-	FILE *file_agenda;
-	file_agenda = fopen("agenda.txt", "r");
-
-	char consulta_do_arquivo[50];
-
-	if(file_agenda == NULL) {
-		system("cls");
-		printf("ERRO: Nao foi possivel abrir o arqiivo agenda.txt!!");
-		exit(1);
-	}
-
-	while(!feof(file_agenda)) {
-		fgets(consulta_do_arquivo,50,file_agenda);
-		if(strstr(consulta_do_arquivo,cpf) != NULL){
-			printf("%s", consulta_do_arquivo);
-		}
-	}
-
-	fclose(file_agenda);
-	
-	printf("Clique alguma coisa para continuar...");
-	getch();
-}
-
 void achar_consultas_dia() {
 	char data[10];
 
@@ -536,46 +435,42 @@ void achar_consultas_dia() {
 	getch();
 }
 
-void verificar_paciente_cadastrado(char cpf[15]) {
-	int paciente_existe = 0;
-	int controlador = 0;
+void achar_consultas_cpf() {
+	char cpf[15];
+	
+	system("cls");
 
-	FILE *file_paciente;
-	file_paciente = fopen("pacientes.txt", "r");
+	printf("--------------------CPF A SER PROCURADO--------------------\n");
+	printf("Insira o cpf: ");
+	fflush(stdin);
+	fgets(cpf,15,stdin);
+	verificar_cpf(cpf);
+	verificar_paciente_cadastrado(cpf);
 
-	char consulta_do_arquivo[100];
+	system("cls");
+	printf("--------------------CONSULTAS DESSE CPF--------------------\n");
+	FILE *file_agenda;
+	file_agenda = fopen("agenda.txt", "r");
 
-	if(file_paciente == NULL) {
-		printf("ERRO: Nao foi possivel abri o arquivo pacientes.txt");
+	char consulta_do_arquivo[50];
+
+	if(file_agenda == NULL) {
+		system("cls");
+		printf("ERRO: Nao foi possivel abrir o arqiivo agenda.txt!!");
 		exit(1);
 	}
 
-	do {
-		if(controlador!=0) {
-			system("cls");
-			printf("--------------------PACIENTE NAO EXISTE--------------------\n");
-			printf("Insira o cpf novamente:");
-			fflush(stdin);
-			fgets(cpf,15,stdin);
-			verificar_cpf(cpf);
-			fclose(file_paciente);
-			FILE *file_paciente;
-			file_paciente = fopen("pacientes.txt", "r");
+	while(!feof(file_agenda)) {
+		fgets(consulta_do_arquivo,50,file_agenda);
+		if(strstr(consulta_do_arquivo,cpf) != NULL){
+			printf("%s", consulta_do_arquivo);
 		}
-		
-		while(!feof(file_paciente)) {
-			fgets(consulta_do_arquivo,100,file_paciente);
-			if(strstr(consulta_do_arquivo,cpf) != NULL){
-				paciente_existe = 1;
-			}
-		}
-		
-		controlador++;
-		
-	} while(paciente_existe==0);
+	}
 
-	fclose(file_paciente);
-
+	fclose(file_agenda);
+	
+	printf("Clique alguma coisa para continuar...");
+	getch();
 }
 
 void excluir_consulta() {
@@ -664,4 +559,126 @@ void excluir_consulta() {
 	printf("\nAperte uma tecla para continuar...");
 	getch();
 	system("cls");
+}
+
+void verificar_login(char usuario_entrada[20], char senha_entrada[20]) {
+	int verificar_usuario, verificar_senha;
+	
+	verificar_usuario = strcmp(usuario_setado, usuario_entrada);
+	verificar_senha = strcmp(senha_setada, senha_entrada);
+	
+	while(verificar_senha != 0 || verificar_usuario != 0) {
+		system("cls"); //limpar terminal windows
+
+		printf("--------------------LOGIN OU SENHA INCORRETO--------------------\n");
+
+		printf("Digite o nome de usuario novamente: ");
+		fgets(usuario_entrada,20,stdin);
+		usuario_entrada[strcspn(usuario_entrada, "\n")] = 0; //tirando o "\n" da string
+		printf("Digite a sua senha novamente: ");
+		fgets(senha_entrada,20,stdin);
+		senha_entrada[strcspn(senha_entrada, "\n")] = 0; //tirando o "\n" da string
+
+		verificar_usuario = strcmp(usuario_setado, usuario_entrada);
+		verificar_senha = strcmp(senha_setada, senha_entrada);
+	}
+}
+
+void verificar_cpf(char cpf[15]) {
+	int i, cont = 0;
+	
+	do {	
+		cont = 0;
+		for(i = 0; i < 15; i++) {
+			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
+			if(cpf[i] > 58 ) {
+				cont++;
+				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
+				fflush(stdin);
+				fgets(cpf,15,stdin);
+				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
+				system("cls");
+			}
+		}	
+		
+		if(cpf[3] != '.' || cpf[7] != '.' || cpf[11] != '.') {
+			cont++;
+				printf("CPF invalido, digite apenas numeros e siga o modelo: ***.***.***.**: ");
+				fflush(stdin);
+				fgets(cpf,15,stdin);
+				cpf[strcspn(cpf, "\n")] = 0; //tirando o "\n" da string	
+				system("cls");
+		}
+		
+	} while(cont > 0);
+}
+
+void verificar_tel(char tel[15]) {
+	int i, cont = 0;
+	
+	do {	
+		cont = 0;
+		for(i = 0; i < 15; i++) {
+			//checando se possui alguma letra (percorrendo caracter por caracter) de acordo com a tabela ASCII
+			if(tel[i] > 58 ) {
+				cont++;
+				printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
+				fflush(stdin);
+				fgets(tel,15,stdin);
+				tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
+				system("cls");
+			}
+		}
+		
+		if(tel[0] != '(' || tel[3] != ')' || tel[9] != '-') {
+			cont++;
+			printf("Telefone invalido, digite apenas numeros e siga o modelo (**)*****-****: ");
+			fflush(stdin);
+			fgets(tel,15,stdin);
+			tel[strcspn(tel, "\n")] = 0; //tirando o "\n" da string	
+			system("cls");
+		}
+	} while(cont > 0);
+}
+	
+void verificar_paciente_cadastrado(char cpf[15]) {
+	int paciente_existe = 0;
+	int controlador = 0;
+
+	FILE *file_paciente;
+	file_paciente = fopen("pacientes.txt", "r");
+
+	char consulta_do_arquivo[100];
+
+	if(file_paciente == NULL) {
+		printf("ERRO: Nao foi possivel abri o arquivo pacientes.txt");
+		exit(1);
+	}
+
+	do {
+		if(controlador!=0) {
+			system("cls");
+			printf("--------------------PACIENTE NAO EXISTE--------------------\n");
+			printf("Insira o cpf novamente:");
+			fflush(stdin);
+			fgets(cpf,15,stdin);
+			verificar_cpf(cpf);
+			fclose(file_paciente);
+			FILE *file_paciente;
+			file_paciente = fopen("pacientes.txt", "r");
+		}
+		
+		while(!feof(file_paciente)) {
+			fgets(consulta_do_arquivo,100,file_paciente);
+			if(strstr(consulta_do_arquivo,cpf) != NULL){
+				paciente_existe = 1;
+			}
+		}
+		
+		controlador++;
+		
+	} while(paciente_existe==0);
+
+	fclose(file_paciente);
+
 }
