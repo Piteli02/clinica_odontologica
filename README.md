@@ -11,7 +11,7 @@ O intuito do programa eh basicamente criar um "CRUD" na linguagem C, onde será 
     
 - Visualizar consultas;
     
-- Cancelar consultas;
+- Excluir consultas;
 
 O programa vai ser desenvolvido na linguagem C e toda a interação do usuário será, através do terminal.
 
@@ -60,24 +60,27 @@ Toda vez que o usuário rodar o programa, será solicitado um usuário e senha, 
 	utilização do software deve ser capaz de fazer essas alterações.
 
 - Menu principal
-	- Botao de voltar
-
-#### Henrique Bexiga Eulálio:
-
-- Visualizar consultas de um determinado dia
-	- O usuário do sistema pode ter acesso as consultas de determinado dia selecionado, com
-	informações como horário da consulta e paciente.
 
 - Visualizar consultas de determinado paciente
 	- Caso casualidades aconteçam e seja preciso acessar todas as consultas de um cliente, o
 	responsável pela utilização de software pode fazer essa consulta rapidamente.
 
+#### Henrique Bexiga Eulálio:
+- Visualizar consultas de um determinado dia
+	- O usuário do sistema pode ter acesso as consultas de determinado dia selecionado, com
+	informações como horário da consulta e paciente.
+- Teste
+- Revisao
+- Auxiliou em todas as etapas
+
 
 ## :stop_sign:RESTRIÇÕES:
-- Antes de cadastras alguem, preciso verificar se ele já está cadastrado;
-- Um paciente só pode ter uma consulta por dia;
 - Caso o programa seja rodado em um computador com o sistema LINUX, pode ser que ele não rode apropriadamente, tendo em vista que que o comando "fflush(stdin)" não apresenta um comportamenteo adequado e será modificado em breve
 
 
-## :warning:OBSERVAÇÃO:
-Após um funcionamentoa adequado do software, seria interessante que a cada vez que o admistrador fizer login, seja possível inserir a data do dia, desse modo, as consultas anteriores a essa data escrita devem ser excluidas do TXT.
+## :warningA CORRIGIR
+Topicos os quais devem ser corregidos, para um melhor funcionamento do software
+- É possivel um paciente agendar todas as consultas do dia;
+- Não tem limite de consultas no dia;
+- É possivel agendar mais de uma consulta no mesmo horario e data;
+- Quando eu altero a consulta, preciso inserir o cpf de novo, ou seja, é como se eu excluisse e marcasse outra dnv;
