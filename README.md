@@ -78,7 +78,7 @@ Toda vez que o usuário rodar o programa, será solicitado um usuário e senha, 
 - Caso o programa seja rodado em um computador com o sistema LINUX, pode ser que ele não rode apropriadamente, tendo em vista que que o comando "fflush(stdin)" não apresenta um comportamenteo adequado e será modificado em breve
 
 
-## :warningA CORRIGIR
+## :warning:A CORRIGIR
 Topicos os quais devem ser corregidos, para um melhor funcionamento do software
 - É possivel um paciente agendar todas as consultas do dia;
 - Não tem limite de consultas no dia;
